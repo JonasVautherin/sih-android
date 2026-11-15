@@ -33,7 +33,7 @@ jobs:
       APP: ${{ matrix.app }}
       GRADLE_FLAVOR: ${{ matrix.gradle_flavor }}
       APK_NAME: ${{ matrix.apk }}
-      VERSION_NAME: ${{ github.event_name == 'release' && github.event.release.tag_name || format('0.1.{0}', github.run_number) }}
+      VERSION_NAME: ${{ format('0.1.{0}', github.run_number) }}
 
     steps:
       - uses: actions/checkout@v7.0.1
@@ -49,6 +49,15 @@ jobs:
         id: python
         with:
           python-version: '3.11'
+
+      - name: Get version from release tag
+        if: github.event_name == 'release'
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          version_name=$(python .github/scripts/release_version.py "$RELEASE_TAG")
+          echo "Detected version name: $version_name"
+          printf 'VERSION_NAME=%s\n' "$version_name" >> "$GITHUB_ENV"
 
       - uses: android-actions/setup-android@v4.0.4
         with:
@@ -124,7 +133,7 @@ jobs:
           ./gradlew ":app:assemble${GRADLE_FLAVOR}Release" ":app:lint${GRADLE_FLAVOR}Release" \
             -PsigningFlavor="$APP" \
             -PversionCode="$GITHUB_RUN_NUMBER" \
-            -PversionName="${VERSION_NAME#v}" \
+            -PVERSION="$VERSION_NAME" \
             --no-daemon --no-configuration-cache --console=plain
 
       - name: Verify and stage signed APK
