@@ -1,0 +1,36 @@
+# Android and Gradle outputs
+.gradle/
+.kotlin/
+build/
+.cxx/
+.externalNativeBuild/
+local.properties
+*.apk
+*.aab
+*.ap_
+captures/
+*.hprof
+
+# Android Studio
+.idea/
+*.iml
+
+# Native superbuilds, including downloaded autopilot sources and install prefixes
+/ardupilot/src/build*/
+/px4/src/build*/
+CMakeUserPresets.json
+
+# Python build environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Local release signing
+/.signing/
+*.jks
+*.keystore
+keystore.properties
+
+# macOS
+.DS_Store
