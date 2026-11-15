@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.22.1)
+project(simulator_jni LANGUAGES C CXX)
+
+if(SIMULATOR STREQUAL "ardupilot")
+    add_subdirectory("../../ardupilot/src/main" ardupilot)
+elseif(SIMULATOR STREQUAL "px4")
+    add_subdirectory("../../px4/src/main" px4)
+else()
+    message(FATAL_ERROR "Select the ardupilot or px4 simulator flavor")
+endif()

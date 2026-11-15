@@ -1,0 +1,2 @@
+# Build dependencies from the pinned v1.18.0-rc1 source.
+-r https://raw.githubusercontent.com/PX4/PX4-Autopilot/fca3df865af36124a28c9d607e850f111dbaaea9/Tools/setup/requirements.txt

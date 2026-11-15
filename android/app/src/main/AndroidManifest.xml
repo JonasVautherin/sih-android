@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- needed even for loopback sockets -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+
+        <activity
+            android:name="${applicationId}.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- The simulator never returns from its main loop and keeps global state, so
+             it gets a process of its own which is killed to stop or reset it.
+             Exported so that the app under test can start and stop the
+             simulator itself, see the autopilot README for the intent contract. -->
+        <service
+            android:name="${applicationId}.SitlService"
+            android:exported="true"
+            android:foregroundServiceType="specialUse"
+            android:process=":sitl">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Runs a vehicle simulator that other apps on the device connect to over MAVLink" />
+            <intent-filter>
+                <action android:name="${applicationId}.action.START" />
+                <action android:name="${applicationId}.action.STOP" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>
